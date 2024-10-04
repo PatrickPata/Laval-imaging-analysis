@@ -3,12 +3,15 @@
 % Created on Oct 3, 2024
 
 % A. Set parameters
-datafolimg = 'C:/Laval_Postdoc/Imaging_analysis/example_inputs/';
-datafolseg = 'C:/Laval_Postdoc/Imaging_analysis/example_segmentations/';
+datafolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_inputs/';
+datafolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_segmentations/';
 resFactor = 4; % Rescale image n-times lower
 resFactorFrac = 1/resFactor;
-outfolimg = 'C:/Laval_Postdoc/Imaging_analysis/example_lowres_inputs/';
-outfolseg = 'C:/Laval_Postdoc/Imaging_analysis/example_lowres_segmentations/';
+outfolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_lowres_inputs/';
+outfolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_lowres_segmentations/';
+
+% The diagnostics table to output.
+imgInfo = {};
 
 % B. Set up loop over all images in folder
 dinfo = dir(datafolimg);
@@ -25,8 +28,15 @@ for ii = 1:length(full_filenames)
 
     % Need to crop the image to be a multiple of the resFactor to calculate
     % the error after rescaling.
-    I = imcrop(I, [0 0 floor(size(I,2)/resFactor)*resFactor floor(size(I,1)/resFactor)*resFactor]);
-    Seg = imcrop(Seg, [0 0 floor(size(I,2)/resFactor)*resFactor floor(size(I,1)/resFactor)*resFactor]);
+    
+    dimX = size(I,2);
+    dimY = size(I,1);
+    xlim = floor(dimX/resFactor)*resFactor;
+    ylim = floor(dimY/resFactor)*resFactor;
+    cropX = dimX - xlim;
+    cropY = dimY - ylim;
+    I = imcrop(I, [0 0 xlim ylim]);
+    Seg = imcrop(Seg, [0 0 xlim ylim]);
 
 
     % figure; imshow(I)
@@ -50,12 +60,17 @@ for ii = 1:length(full_filenames)
     lipidErr = Seg - Seghigh;
     % figure; pcolor(flipud(lipidErr)); shading flat
 
+    lipidArea = sum(sum(Seg));
     lipidErrSum = sum(sum(abs(lipidErr)));
-    lipidErrPercLipid = lipidErrSum / sum(sum(Seg)) * 100;
-    % lipidErrPercGrid = lipidErrSum / prod(size(Seg)) * 100;
+    lipidErrPercLipid = (lipidErrSum / lipidArea) * 100;
+    lipidErrPercGrid = (lipidErrSum / prod(size(Seg))) * 100;
 
     disp(strcat('Image #', num2str(ii), ' rescale error:  ', ...
         num2str(lipidErrPercLipid,'%.1f'), '%'))
+
+    imgInfo = cat(1, imgInfo, {full_filenames{ii}, resFactor, ...
+        dimX, dimY, cropX, cropY, ...
+        lipidArea, lipidErrPercLipid, lipidErrPercGrid});
 
     % 4. Output the low res image and note error in file name
     imwrite(Ilow, ...
@@ -67,3 +82,10 @@ for ii = 1:length(full_filenames)
         '_err_', num2str(lipidErrPercLipid,'%.1f'), ...
         '_',full_filenames{ii}))
 end
+
+% C. Output the diagnostic file.
+imgInfo = array2table(imgInfo);
+imgInfo.Properties.VariableNames(1:9) = {'filename','resize_factor', ...
+    'dimX','dimY','xcrop','ycrop',...
+    'n_lipid_pixels', 'rescale_error', 'error_per_grid'};
+writetable(imgInfo,strcat( strcat(outfolseg,'resize_diagnostics.csv')))
