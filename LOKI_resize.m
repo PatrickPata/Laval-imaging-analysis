@@ -5,10 +5,18 @@
 % A. Set parameters
 datafolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_inputs/';
 datafolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_segmentations/';
-resFactor = 4; % Rescale image n-times lower
+resFactor = 2; % Rescale image n-times lower
 resFactorFrac = 1/resFactor;
-outfolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_lowres_inputs/';
-outfolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_lowres_segmentations/';
+outfolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_lowres_inputs2/';
+outfolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_lowres_segmentations2/';
+
+
+if not(isfolder(outfolimg))
+    mkdir(outfolimg)
+end
+if not(isfolder(outfolseg))
+    mkdir(outfolseg)
+end
 
 % The diagnostics table to output.
 imgInfo = {};
