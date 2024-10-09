@@ -3,12 +3,12 @@
 % Created on Oct 3, 2024
 
 % A. Set parameters
-datafolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_inputs/';
-datafolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_segmentations/';
-resFactor = 2; % Rescale image n-times lower
+datafolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/LOKI images/LOKI images/copepod_lipid_images/';
+datafolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/LOKI images/LOKI images/copepod_segmentations/';
+resFactor = 4; % Rescale image n-times lower
 resFactorFrac = 1/resFactor;
-outfolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_lowres_inputs2/';
-outfolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/example_lowres_segmentations2/';
+outfolimg = 'C:/Laval_Postdoc/Laval-imaging-analysis/LOKI images/downscaled_4/images_processed/';
+outfolseg = 'C:/Laval_Postdoc/Laval-imaging-analysis/LOKI images/downscaled_4/segmentations_processed/';
 
 
 if not(isfolder(outfolimg))
@@ -82,13 +82,15 @@ for ii = 1:length(full_filenames)
 
     % 4. Output the low res image and note error in file name
     imwrite(Ilow, ...
-        strcat(outfolimg, 'rf_', num2str(resFactor), ...
-        '_err_', num2str(lipidErrPercLipid,'%.1f'), ...
-        '_',full_filenames{ii}))
+        strcat(outfolimg, full_filenames{ii}));
+        % 'rf_', num2str(resFactor), ...
+        % '_err_', num2str(lipidErrPercLipid,'%.1f'),'_', ...
+        % full_filenames{ii}))
     imwrite(Seglow, ...
-        strcat(outfolseg, 'rf_', num2str(resFactor), ...
-        '_err_', num2str(lipidErrPercLipid,'%.1f'), ...
-        '_',full_filenames{ii}))
+        strcat(outfolseg, full_filenames{ii}));
+        % 'rf_', num2str(resFactor), ...
+        % '_err_', num2str(lipidErrPercLipid,'%.1f'),'_', ...
+        % full_filenames{ii}))
 end
 
 % C. Output the diagnostic file.
@@ -97,3 +99,16 @@ imgInfo.Properties.VariableNames(1:9) = {'filename','resize_factor', ...
     'dimX','dimY','xcrop','ycrop',...
     'n_lipid_pixels', 'rescale_error', 'error_per_grid'};
 writetable(imgInfo,strcat( strcat(outfolseg,'resize_diagnostics.csv')))
+
+% D. Image rescale diagnostics
+disp(strcat('Mean rescale error: ', ...
+    num2str( mean(cell2mat(imgInfo.rescale_error))), '%'))
+
+disp(strcat('Max rescale error: ', ...
+    num2str( max(cell2mat(imgInfo.rescale_error))), '%'))
+
+disp(strcat('Mean error per grid: ', ...
+    num2str( mean(cell2mat(imgInfo.error_per_grid))), '%'))
+
+disp(strcat('Max error per grid: ', ...
+    num2str( max(cell2mat(imgInfo.error_per_grid))), '%'))
