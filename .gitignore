@@ -12,3 +12,7 @@ LOKI images-20241007T173033Z-001.zip
 mask_vs_points/project-11-points.csv
 mask_vs_points/project-12-masks.csv
 /mask_vs_points/masks
+/cUVP6_darkedge
+/UVP5_greenedge
+/UVP6_darkedge
+/prosome_mask

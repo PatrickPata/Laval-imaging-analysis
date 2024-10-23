@@ -37,9 +37,11 @@ def create_mask_from_polygon_data(data, root_folderpath: pathlib.Path):
     # Step 4: Draw/Fill the polygon in the mask with a value of 1
     cv2.fillPoly(mask, [polygon_points], color=1)
     output_path = (
-        root_folderpath / f"{data['image'][-40:-4]}-{data['label']['polygonlabels'][0]}_mask.png"
+        # root_folderpath / f"{data['image'][-40:-4]}-{data['label']['polygonlabels'][0]}_mask.png" # For LOKI
+        root_folderpath / f"{data['image'][-34:-4]}-{data['label']['polygonlabels'][0]}_mask.png" # For UVP6
     )
-    cv2.imwrite(str(output_path), mask * 255)
+    # cv2.imwrite(str(output_path), mask * 255)
+    cv2.imwrite(str(output_path), mask) # For UVP6/Appsilon, the masks are in 0,1
 
 
 def process_row(row_data, root_folderpath):
@@ -76,6 +78,7 @@ def create_mask_from_csv(csv_path, masks_dst_folderpath, num_threads=4):
 
 
 if __name__ == "__main__":
-    csv_path = r"C:\Laval_Postdoc\Laval-imaging-analysis\mask_vs_points\project-11-points.csv"
-    root_folderpath = r"C:\Laval_Postdoc\Laval-imaging-analysis\mask_vs_points\masks\project11"
+    csv_path = r"UVP6_darkedge\segmentations\project-15-at-2024-10-22-15-49-5ec3a8cc.csv"
+    root_folderpath = r"c:\Users\patri\project15_results" # TODO must export outside onedrive... also separate prosome and lipid segmentations to separate folders
     create_mask_from_csv(csv_path, root_folderpath)
+
