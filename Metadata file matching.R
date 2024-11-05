@@ -35,3 +35,8 @@ fileList <- cyrilCurated %>%
 # Export updated metadata file
 write.csv(fileList,
           file = "C:/Users/patri/python_workspace/copepods-lipid-content/metadata_prosome_lipid.csv")
+
+# Proportion of test and trait
+fileList %>% 
+  group_by(is_valid) %>% 
+  count()
