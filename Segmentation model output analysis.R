@@ -70,3 +70,36 @@ ggplot(uvp6.test, aes(x = lipid_pixels_annotated,
                  sprintf("%.1f",mean(uvp6.test$percent_overlap))))
 
 
+# Calculate the spread of the error of segmentation estimates, and the RMSE
+ggplot(loki.prosome, aes(x = (prosome_mass_annotated - prosome_mass_predicted))) +
+  geom_histogram() +
+  xlab("difference in mass (mg)") +
+  ggtitle(paste0("Prosome segmentation, RMSE = ", 
+                 sprintf("%.3f", sqrt(mean(loki.prosome$prosome_mass_annotated -
+                                         loki.prosome$prosome_mass_predicted)^2)),
+                 " mg"))
+
+ggplot(loki.lipid.orig, aes(x = (lipid_mass_annotated - lipid_mass_predicted))) +
+  geom_histogram() +
+  xlab("difference in mass (mg)") +
+  ggtitle(paste0("Lipid segmentation orig, RMSE = ", 
+                 sprintf("%.3f", sqrt(mean(loki.lipid.orig$lipid_mass_annotated -
+                                             loki.lipid.orig$lipid_mass_predicted)^2)),
+                 " mg"))
+
+ggplot(loki.lipid.crop, aes(x = (lipid_mass_annotated - lipid_mass_predicted))) +
+  geom_histogram() +
+  xlab("difference in mass (mg)") +
+  ggtitle(paste0("Lipid segmentation crop, RMSE = ", 
+                 sprintf("%.3f", sqrt(mean(loki.lipid.crop$lipid_mass_annotated -
+                                             loki.lipid.crop$lipid_mass_predicted)^2)),
+                 " mg"))
+
+ggplot(uvp6.test, aes(x = (lipid_mass_annotated - lipid_mass_predicted))) +
+  geom_histogram() +
+  xlab("difference in mass (mg)") +
+  ggtitle(paste0("Lipid segmentation UVP6, RMSE = ", 
+                 sprintf("%.3f", sqrt(mean(uvp6.test$lipid_mass_annotated -
+                                             uvp6.test$lipid_mass_predicted)^2)),
+                 " mg"))
+
