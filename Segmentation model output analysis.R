@@ -6,7 +6,9 @@ library(tidyverse)
 # **Read the outputs**
 
 # Prosome segmentation of LOKI images
-loki.prosome <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/prediction_outputs/loki_prosome/prediction_results.csv")
+loki.prosome <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/prediction_outputs/loki_prosome/prediction_results.csv") %>% 
+  rename(prosome_pixels_annotated = lipid_pixels_annotated) %>% 
+  rename(prosome_pixels_predicted = lipid_pixels_predicted)
 
 
 # The lipid segmentation using the original Appsilon model
@@ -18,6 +20,9 @@ loki.lipid.crop <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-cont
 
 # The UVP6 test runs using the downscalled LOKI
 uvp6.test <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/prediction_outputs/uvp6_test/prediction_results.csv")
+
+# TODO Add metadata table for LOKI images indicating which ones were used for training/test
+
 
 
 # Average IoUs
@@ -103,3 +108,29 @@ ggplot(uvp6.test, aes(x = (lipid_mass_annotated - lipid_mass_predicted))) +
                                              uvp6.test$lipid_mass_predicted)^2)),
                  " mg"))
 
+
+
+# Prosome pixels vs lipid pixels
+# Is there a relationship that could be used as an empirical function?
+prosome.lipid <- loki.prosome %>% 
+  select(-c(directory, percent_overlap, percent_of_annotated)) %>% 
+  left_join(loki.lipid.crop,
+            by = join_by(filename)) %>% 
+  select(-c(directory, percent_overlap, percent_of_annotated)) 
+
+ggplot(prosome.lipid, aes(x = prosome_pixels_annotated,
+                          y = lipid_pixels_annotated)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth()
+
+# If based on predicted, could work... but the lipid prediction more typically predict zero or very low lipid mass
+ggplot(prosome.lipid, aes(x = prosome_pixels_predicted,
+                          y = lipid_pixels_predicted)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth()
+
+# Empirical model for estimating lipid area if only given the prosome area
+# R2adj = 0.863
+em.prosome.lipid <- lm(lipid_pixels_annotated ~ prosome_pixels_annotated,
+                       data = prosome.lipid)
+summary(em.prosome.lipid)
