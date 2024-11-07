@@ -18,22 +18,54 @@ loki.lipid.orig <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-cont
 # The lipid segmentation using the retrained model on the cropped prosomes
 loki.lipid.crop <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/prediction_outputs/loki_prosome_cropped/prediction_results.csv")
 
+# The lipid segmentation of the downscaled Loki images to /4
+loki.lipid.down4 <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/prediction_outputs/loki_downscale_4/prediction_results.csv") %>% 
+  mutate(lipid_mass_annotated = lipid_mass_annotated * 4 * 4,
+         lipid_mass_predicted = lipid_mass_predicted * 4 * 4) # reverse the mass conversion for each pixel
+
+
+
 # The UVP6 test runs using the downscalled LOKI
 uvp6.test <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/prediction_outputs/uvp6_test/prediction_results.csv")
 
-# TODO Add metadata table for LOKI images indicating which ones were used for training/test
+# Add metadata table for LOKI images indicating which ones were used for training/test
+# ! The is_valid variable determines if the image was used in the training (FALSE)
+meta.lipidsPaper <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/metadata_full.csv") %>% 
+  mutate(data_use = if_else(is_valid == "True", "test", "train"))
 
+
+# The analysis of the Maps et al. 2023 paper
+ggplot(meta.lipidsPaper, aes(x = copepod_area_pixels,
+                      y = IoU, color = data_use)) +
+  geom_point(alpha = 0.2) +
+  geom_hline(yintercept = .80, linetype = "dashed", color = "orange") +
+  geom_hline(yintercept = .90, linetype = "longdash", color = "orange") +
+  geom_smooth() +
+  ggtitle(paste0("Maps et al. 2023 results, IoU = ", 
+                 sprintf("%.1f",mean(meta.lipidsPaper$IoU))))
+
+
+ggplot(meta.lipidsPaper, aes(x = (copepod_mass_annotated - copepod_mass_pred),
+                             fill = data_use)) +
+  geom_histogram() +
+  xlab("difference in mass (mg)") +
+  ggtitle(paste0("Maps et al. 2023 results, RMSE = ", 
+                 sprintf("%.3f", sqrt(mean(meta.lipidsPaper$copepod_mass_annotated -
+                                             meta.lipidsPaper$copepod_mass_pred)^2)),
+                 " mg"))
 
 
 # Average IoUs
 mean(loki.prosome$percent_overlap)
 mean(loki.lipid.orig$percent_overlap)
 mean(loki.lipid.crop$percent_overlap)
+mean(loki.lipid.down4$percent_overlap)
 mean(uvp6.test$percent_overlap)
 
 median(loki.prosome$percent_overlap)
 median(loki.lipid.orig$percent_overlap)
 median(loki.lipid.crop$percent_overlap)
+median(loki.lipid.down4$percent_overlap)
 median(uvp6.test$percent_overlap)
 
 
@@ -65,6 +97,17 @@ ggplot(loki.lipid.crop, aes(x = lipid_pixels_annotated,
   ggtitle(paste0("Lipid segmentation with retrained cropped prosome model, IoU = ", 
                  sprintf("%.1f",mean(loki.lipid.crop$percent_overlap))))
 
+
+ggplot(loki.lipid.down4, aes(x = lipid_pixels_annotated,
+                            y = percent_overlap)) +
+  geom_point(alpha = 0.2) +
+  geom_hline(yintercept = 80, linetype = "dashed", color = "orange") +
+  geom_hline(yintercept = 90, linetype = "longdash", color = "orange") +
+  geom_smooth() +
+  ggtitle(paste0("Lipid segmentation of downscaled /4 LOKI, IoU = ", 
+                 sprintf("%.1f",mean(loki.lipid.crop$percent_overlap))))
+
+
 ggplot(uvp6.test, aes(x = lipid_pixels_annotated,
                             y = percent_overlap)) +
   geom_point(alpha = 0.2) +
@@ -73,6 +116,9 @@ ggplot(uvp6.test, aes(x = lipid_pixels_annotated,
   geom_smooth() +
   ggtitle(paste0("Lipid segmentation of UVP6 using LOKI downscale, IoU = ", 
                  sprintf("%.1f",mean(uvp6.test$percent_overlap))))
+
+
+
 
 
 # Calculate the spread of the error of segmentation estimates, and the RMSE
@@ -98,6 +144,14 @@ ggplot(loki.lipid.crop, aes(x = (lipid_mass_annotated - lipid_mass_predicted))) 
   ggtitle(paste0("Lipid segmentation crop, RMSE = ", 
                  sprintf("%.3f", sqrt(mean(loki.lipid.crop$lipid_mass_annotated -
                                              loki.lipid.crop$lipid_mass_predicted)^2)),
+                 " mg"))
+
+ggplot(loki.lipid.down4, aes(x = (lipid_mass_annotated - lipid_mass_predicted))) +
+  geom_histogram() +
+  xlab("difference in mass (mg)") +
+  ggtitle(paste0("Lipid segmentation /4 downscale, RMSE = ", 
+                 sprintf("%.3f", sqrt(mean(loki.lipid.down4$lipid_mass_annotated -
+                                             loki.lipid.down4$lipid_mass_predicted)^2)),
                  " mg"))
 
 ggplot(uvp6.test, aes(x = (lipid_mass_annotated - lipid_mass_predicted))) +
