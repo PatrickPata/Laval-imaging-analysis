@@ -26,7 +26,7 @@ loki.lipid.down4 <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-con
 
 
 # The UVP6 test runs using the downscalled LOKI
-uvp6.test <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/prediction_outputs/uvp6_test/prediction_results.csv")
+uvp6.test <- read.csv("C:/Users/patri/python_workspace/copepods-lipid-content/prediction_outputs/uvp6_lokidownscale4/prediction_results.csv")
 
 # Add metadata table for LOKI images indicating which ones were used for training/test
 # ! The is_valid variable determines if the image was used in the training (FALSE)
@@ -109,7 +109,7 @@ ggplot(loki.lipid.down4, aes(x = lipid_pixels_annotated,
 
 
 ggplot(uvp6.test, aes(x = lipid_pixels_annotated,
-                            y = percent_overlap)) +
+                            y = IoU)) +
   geom_point(alpha = 0.2) +
   geom_hline(yintercept = 80, linetype = "dashed", color = "orange") +
   geom_hline(yintercept = 90, linetype = "longdash", color = "orange") +
