@@ -111,8 +111,10 @@ def create_mask_from_csv(csv_path, masks_dst_folderpath, num_threads=4):
 
 if __name__ == "__main__":
     # csv_path = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_darkedge\TEST.csv"
-    csv_path = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_darkedge\segmentations\project-15-at-2024-11-07-12-48-0776fc31.csv"
+    csv_path = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_darkedge\project-15-at-2025-01-14-16-16-cc93788f.csv"
     root_folderpath = r"c:\Users\patri\project15_results" # TODO must export outside onedrive... also separate prosome and lipid segmentations to separate folders
     create_mask_from_csv(csv_path, root_folderpath)
+
+
 
 

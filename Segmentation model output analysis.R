@@ -70,7 +70,7 @@ median(uvp6.test$percent_overlap)
 
 
 # IoU vs segmentation area in pixels
-ggplot(loki.prosome, aes(x = lipid_pixels_annotated,
+ggplot(loki.prosome, aes(x = prosome_pixels_annotated,
                          y = percent_overlap)) +
   geom_point(alpha = 0.2) +
   geom_hline(yintercept = 80, linetype = "dashed", color = "orange") +
