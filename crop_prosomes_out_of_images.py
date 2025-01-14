@@ -33,5 +33,5 @@ def apply_mask_to_all(image_dir, mask_dir, output_dir):
             print(f"Processed and saved: {output_path}")
 
 # Example usage
-apply_mask_to_all(r"C:\Users\patri\python_workspace\data\images_processed", r"C:\Users\patri\python_workspace\data\prosome\data\segmentations_processed", r"C:\Users\patri\python_workspace\data\cropped_prosome_annotation")
+apply_mask_to_all(r"C:\Users\patri\python_workspace\uvp6_939_images\images_with_prosome", r"C:\Users\patri\python_workspace\uvp6_939_images\prosome", r"C:\Users\patri\python_workspace\uvp6_939_images\images_of_cropped_prosome")
 

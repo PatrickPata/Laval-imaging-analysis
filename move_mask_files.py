@@ -1,4 +1,5 @@
 # This is the script for moving the prosome/lipid masks created from label studio to a separate folder to input in the segmentation model.
+# Not all the original black_bg copepod images will have prosome and mask files which is why only moving the images with mask files is necessary.
 
 import os
 import shutil
@@ -58,7 +59,8 @@ def move_similar_files(source_folder, destination_folder, reference_folder):
 
 # Example usage
 source_folder = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_darkedge\UVP6_darkedge_copepod_black_bg"
-destination_folder = r"C:\Users\patri\python_workspace\uvp6_test\data\images_with_lipid"
-reference_folder = r"C:\Users\patri\python_workspace\uvp6_test\data\lipid"
+destination_folder = r"C:\Users\patri\python_workspace\uvp6_939_images\images_with_prosome"
+reference_folder = r"C:\Users\patri\python_workspace\uvp6_939_images\prosome"
 
 move_similar_files(source_folder, destination_folder, reference_folder)
+
