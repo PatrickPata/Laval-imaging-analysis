@@ -76,6 +76,7 @@ def create_mask_from_csv(csv_path, masks_dst_folderpath, num_threads=4):
     df["label"] = df["label"].apply(lambda x: x.replace("true", "True"))
     df["label"] = df["label"].apply(ast.literal_eval)
 
+
     # Create a copy of df for the instances when there are 2 polygons
     df2 = df[df["label"].apply(lambda x: len(x) > 1)].copy()
     
@@ -111,10 +112,6 @@ def create_mask_from_csv(csv_path, masks_dst_folderpath, num_threads=4):
 
 if __name__ == "__main__":
     # csv_path = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_darkedge\TEST.csv"
-    csv_path = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_darkedge\project-15-at-2025-01-14-16-16-cc93788f.csv"
-    root_folderpath = r"c:\Users\patri\project15_results" # TODO must export outside onedrive... also separate prosome and lipid segmentations to separate folders
+    csv_path = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_amundsen2023\project-19-at-2025-02-03-11-17-88acb5fe.csv"
+    root_folderpath = r"c:\Users\patri\project19_results" # TODO must export outside onedrive... also separate prosome and lipid segmentations to separate folders
     create_mask_from_csv(csv_path, root_folderpath)
-
-
-
-

@@ -58,9 +58,9 @@ def move_similar_files(source_folder, destination_folder, reference_folder):
             print(f"Copied: {filename}")
 
 # Example usage
-source_folder = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_darkedge\UVP6_darkedge_copepod_black_bg"
-destination_folder = r"C:\Users\patri\python_workspace\uvp6_939_images\images_with_prosome"
-reference_folder = r"C:\Users\patri\python_workspace\uvp6_939_images\prosome"
+source_folder = r"C:\Users\patri\OneDrive - Université Laval\Laval_Postdoc\Laval-imaging-analysis\UVP6_amundsen2023\Calanus\100\processed"
+destination_folder = r"C:\Users\patri\python_workspace\uvp6_amundsen2023_partial\images_with_lipid"
+reference_folder = r"C:\Users\patri\python_workspace\uvp6_amundsen2023_partial\lipid"
 
 move_similar_files(source_folder, destination_folder, reference_folder)
 
