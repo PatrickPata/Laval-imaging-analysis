@@ -32,6 +32,10 @@ def apply_mask_to_all(image_dir, mask_dir, output_dir):
             processed_image.save(output_path)
             print(f"Processed and saved: {output_path}")
 
-# Example usage
-apply_mask_to_all(r"C:\Users\patri\python_workspace\uvp6_939_images\images_with_prosome", r"C:\Users\patri\python_workspace\uvp6_939_images\prosome", r"C:\Users\patri\python_workspace\uvp6_939_images\images_of_cropped_prosome")
+# # For UVP6 Darkedge
+# apply_mask_to_all(r"C:\Users\patri\python_workspace\uvp6_939_images\images_with_prosome", r"C:\Users\patri\python_workspace\uvp6_939_images\prosome", r"C:\Users\patri\python_workspace\uvp6_939_images\images_of_cropped_prosome")
 
+# For UVP6 Amundsen 2023 part 1
+apply_mask_to_all(r"C:\Users\patri\python_workspace\uvp6_amundsen2023_part1\images_with_prosome", 
+                  r"C:\Users\patri\python_workspace\uvp6_amundsen2023_part1\Prosome", 
+                  r"C:\Users\patri\python_workspace\uvp6_amundsen2023_part1\images_of_cropped_prosome")
